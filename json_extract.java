@@ -102,8 +102,8 @@ public class runtime_measure {
      * Converts ANTLR ParseTree to a custom TreeNode structure for JSON serialization
      */
     private static TreeNode convertParseTreeToJson(ParseTree tree, Parser parser) {
-        if (tree instanceof RuleContext) {
-            RuleContext ruleContext = (RuleContext) tree;
+        if (tree instanceof ParserRuleContext) {
+            ParserRuleContext ruleContext = (ParserRuleContext) tree;
             String ruleName = parser.getRuleNames()[ruleContext.getRuleIndex()];
             
             TreeNode node = new TreeNode(
@@ -156,8 +156,8 @@ public class runtime_measure {
     private static Map<String, Object> convertParseTreeToDetailedJson(ParseTree tree, Parser parser) {
         Map<String, Object> node = new HashMap<>();
         
-        if (tree instanceof RuleContext) {
-            RuleContext ruleContext = (RuleContext) tree;
+        if (tree instanceof ParserRuleContext) {
+            ParserRuleContext ruleContext = (ParserRuleContext) tree;
             String ruleName = parser.getRuleNames()[ruleContext.getRuleIndex()];
             
             node.put("type", "rule");
@@ -206,4 +206,4 @@ public class runtime_measure {
         tokenMap.put("tokenIndex", token.getTokenIndex());
         return tokenMap;
     }
-              }
+}
