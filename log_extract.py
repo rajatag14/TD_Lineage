@@ -2,8 +2,7 @@ import re
 import csv
 import ast
 import sys
-import argparse
-from typing import List, Tuple
+from typing import List
 
 def parse_log_entries(lines: List[str], verbose: bool = False) -> List[List[str]]:
     """
@@ -102,46 +101,35 @@ def write_csv(entries: List[List[str]], output_path: str, verbose: bool = False)
         print(f"Error writing to CSV file {output_path}: {e}")
         sys.exit(1)
 
-def main():
-    """Main function to parse command line arguments and execute the log parsing."""
-    parser = argparse.ArgumentParser(description='Extract pipeline error information from log files')
-    parser.add_argument('--log-file', '-l', default='pipeline.log', 
-                       help='Path to the input log file (default: pipeline.log)')
-    parser.add_argument('--output', '-o', default='extracted_errors.csv',
-                       help='Path to the output CSV file (default: extracted_errors.csv)')
-    parser.add_argument('--verbose', '-v', action='store_true',
-                       help='Enable verbose output during processing')
-    
-    args = parser.parse_args()
-    
-    # Read log file
-    try:
-        with open(args.log_file, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-        
-        if args.verbose:
-            print(f"Read {len(lines)} lines from {args.log_file}")
-            
-    except FileNotFoundError:
-        print(f"Error: Log file '{args.log_file}' not found")
-        sys.exit(1)
-    except IOError as e:
-        print(f"Error reading log file '{args.log_file}': {e}")
-        sys.exit(1)
-    
-    # Parse log entries
-    entries = parse_log_entries(lines, args.verbose)
-    
-    if not entries:
-        print("No matching error patterns found in the log file")
-        if not args.verbose:
-            print("Try running with --verbose to see more details")
-        return
-    
-    # Write to CSV
-    write_csv(entries, args.output, args.verbose)
-    
-    print(f"Extraction complete: {len(entries)} entries written to {args.output}")
+# Configuration - modify these paths as needed
+log_file_path = 'pipeline.log'
+output_csv_path = 'extracted_errors.csv'
+verbose = True  # Set to False to reduce output
 
-if __name__ == "__main__":
-    main()
+# Main execution
+try:
+    # Read log file
+    with open(log_file_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    if verbose:
+        print(f"Read {len(lines)} lines from {log_file_path}")
+        
+except FileNotFoundError:
+    print(f"Error: Log file '{log_file_path}' not found")
+    sys.exit(1)
+except IOError as e:
+    print(f"Error reading log file '{log_file_path}': {e}")
+    sys.exit(1)
+
+# Parse log entries
+entries = parse_log_entries(lines, verbose)
+
+if not entries:
+    print("No matching error patterns found in the log file")
+    if not verbose:
+        print("Set verbose=True to see more details")
+else:
+    # Write to CSV
+    write_csv(entries, output_csv_path, verbose)
+    print(f"Extraction complete: {len(entries)} entries written to {output_csv_path}")
