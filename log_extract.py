@@ -15,8 +15,8 @@ def parse_log_entries(lines: List[str], verbose: bool = False) -> List[List[str]
     Returns:
         List of entries, each containing [database, table, date1, date2, batch]
     """
-    # More flexible regex patterns with better whitespace handling
-    spool_pattern = r"Spool\s+error\s+for\s+(\w+)\s+tables\s+(.*?)$"
+    # Regex patterns based on actual log format
+    spool_pattern = r"Spool\s+error\s+for\s+(\w+)\s+tables\s+(\[.*?\])"
     skip_pattern = r"Skipping\s+date\s+range\s+(\d{4}-\d{2}-\d{2})\s*->\s*(\d{4}-\d{2}-\d{2})\s+for\s+(\w+)\s+batch\s+(\d+)\s+due\s+to\s+error"
     
     entries = []
